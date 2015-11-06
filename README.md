@@ -42,7 +42,11 @@ let rpcCargo = async.cargo((payload, callback) => {
   jsonRpc.batch(payload, callback)
 }, 32)
 
-rpcCargo.push({ method: 'func1', params: [1, 2, 3], callback: function (err, result) { ... })
+rpcCargo.push({
+	method: 'func1',
+	params: [1, 2, 3],
+	callback: (err, result) => { ... }
+})
 
 // or
 let results = {}
@@ -52,7 +56,7 @@ async.map(array, (item, callback) => {
 		params: items,
 		callback
 	})
-}, function (err, results) {
+}, (err, results) => {
 	// ...
 })
 ```
