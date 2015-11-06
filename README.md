@@ -32,4 +32,29 @@ rpc.batch([{
 }, ...])
 ```
 
+The `batch` API can be a little strange at first, but, when used with tools like `async`, it can be extremely powerful:
+
+``` javascript
+let rpc = new YajRPC({ ... })
+// ...
+
+let rpcCargo = async.cargo((payload, callback) => {
+  jsonRpc.batch(payload, callback)
+}, 32)
+
+rpcCargo.push({ method: 'func1', params: [1, 2, 3], callback: function (err, result) { ... })
+
+// or
+let results = {}
+async.map(array, (item, callback) => {
+	rpcCargo.push({
+		method: 'func1',
+		params: items,
+		callback
+	})
+}, function (err, results) {
+	// ...
+})
+```
+
 ## LICENSE [MIT](LICENSE)
