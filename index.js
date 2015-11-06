@@ -21,6 +21,8 @@ RPCClient.prototype.batch = function (batch, done) {
     }
   })
 
+  if (rpcBody.length === 0) return done()
+
   // overflows at UINT32
   rpcCount = (rpcCount + rpcBody.length) | 0
 
