@@ -1,11 +1,13 @@
-let httpify = require('httpify')
+let request = require('request')
 
 // global used to prevent duplicates
 let rpcCount = 0
 
 function RPCClient (opts) {
-  if (opts.user && opts.pass) {
-    this.auth = opts.user + ':' + opts.pass
+  let { pass, user } = opts
+
+  if (pass && user) {
+    this.auth = { pass, user }
   }
 
   this.url = opts.url || 'http://localhost:8332'
@@ -26,22 +28,25 @@ RPCClient.prototype.batch = function (batch, done) {
   // overflows at UINT32
   rpcCount = (rpcCount + rpcBody.length) | 0
 
-  httpify({
+  request({
     url: this.url,
     method: 'POST',
     body: JSON.stringify(rpcBody),
     auth: this.auth
   }, (err, res) => {
-    let rpcResponses = res.body
-
-    if (!Array.isArray(rpcResponses)) {
-      rpcResponses = [rpcResponses]
-    }
-
     let responseMap = {}
-    rpcResponses.forEach(({ error, id, result }) => {
-      responseMap[id] = { error, result }
-    })
+
+    if (!err) {
+      let rpcResponses = res.body
+
+      if (!Array.isArray(rpcResponses)) {
+        rpcResponses = [rpcResponses]
+      }
+
+      rpcResponses.forEach(({ error, id, result }) => {
+        responseMap[id] = { error, result }
+      })
+    }
 
     batch.forEach(({ callback }, i) => {
       if (err) return callback(err)
@@ -71,7 +76,7 @@ RPCClient.prototype.call = function (method, params, callback) {
   // overflows at UINT32
   rpcCount = (rpcCount + 1) | 0
 
-  httpify({
+  request({
     url: this.url,
     method: 'POST',
     body: JSON.stringify(rpcBody),

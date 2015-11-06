@@ -42,7 +42,7 @@
     }
   },
   "dependencies": {
-    "httpify": "^3.0.0"
+    "request": "^2.65.0"
   },
   "devDependencies": {
     "blanket": "*",
