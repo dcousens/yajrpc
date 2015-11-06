@@ -11,7 +11,7 @@ function RPCClient (opts) {
   this.url = opts.url || 'http://localhost:8332'
 }
 
-RPCClient.prototype.batch = function (batch) {
+RPCClient.prototype.batch = function (batch, done) {
   let startCount = rpcCount
   let rpcBody = batch.map(({ method, params, callback }, i) => {
     return {
@@ -37,7 +37,7 @@ RPCClient.prototype.batch = function (batch) {
     }
 
     let responseMap = {}
-    res.body.forEach(({ error, id, result }) => {
+    rpcResponses.forEach(({ error, id, result }) => {
       responseMap[id] = { error, result }
     })
 
@@ -54,6 +54,8 @@ RPCClient.prototype.batch = function (batch) {
 
       callback(null, result)
     })
+
+    done(err)
   })
 }
 
