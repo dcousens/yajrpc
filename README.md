@@ -18,7 +18,7 @@ let rpc = new YajRPC({
 })
 
 // 1 call
-rpc.call('func1', [1, 2, 3], function (err, result) {
+rpc.call('func1', [1, 2, 3], (err, result) => {
 	// ...
 })
 
@@ -26,10 +26,10 @@ rpc.call('func1', [1, 2, 3], function (err, result) {
 rpc.batch([{
 	method: 'func1',
 	params: [1, 2, 3],
-	callback: function (err, result) {
+	callback: (err, result) => {
 		// ...
 	}
-}, ...])
+}, ...], function (err) { ... })
 ```
 
 The `batch` API can be a little strange at first, but, when used with tools like `async`, it can be extremely powerful:
