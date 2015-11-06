@@ -1,0 +1,53 @@
+{
+  "name": "yajrpc",
+  "version": "1.0.0",
+  "description": "Yet another JSON RPC",
+  "author": "Daniel Cousens",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dcousens/yajrpc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dcousens/yajrpc/issues"
+  },
+  "homepage": "https://github.com/dcousens/yajrpc",
+  "keywords": [
+    "yajrpc",
+    "bitcoin",
+    "json-rpc",
+    "rpc",
+    "json"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "coverage": "mocha --require blanket -R travis-cov",
+    "coverage-local": "mocha --require blanket -R html-cov",
+    "standard": "standard",
+    "test": "npm run standard && npm run unit",
+    "unit": "mocha"
+  },
+  "config": {
+    "blanket": {
+      "pattern": [
+        ""
+      ],
+      "data-cover-never": [
+        "node_modules",
+        "test"
+      ]
+    },
+    "travis-cov": {
+      "threshold": 100
+    }
+  },
+  "dependencies": {
+    "httpify": "^3.0.0"
+  },
+  "devDependencies": {
+    "blanket": "*",
+    "mocha": "*",
+    "standard": "*",
+    "travis-cov": "*"
+  }
+}
