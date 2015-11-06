@@ -37,15 +37,23 @@ RPCClient.prototype.batch = function (batch, done) {
     let responseMap = {}
 
     if (!err) {
-      let rpcResponses = res.body
+      let rpcResponses
 
-      if (!Array.isArray(rpcResponses)) {
-        rpcResponses = [rpcResponses]
+      try {
+        rpcResponses = JSON.parse(res.body)
+      } catch (e) {
+        err = e
       }
 
-      rpcResponses.forEach(({ error, id, result }) => {
-        responseMap[id] = { error, result }
-      })
+      if (rpcResponses) {
+        if (!Array.isArray(rpcResponses)) {
+          rpcResponses = [rpcResponses]
+        }
+
+        rpcResponses.forEach(({ error, id, result }) => {
+          responseMap[id] = { error, result }
+        })
+      }
     }
 
     batch.forEach(({ callback }, i) => {
@@ -84,8 +92,15 @@ RPCClient.prototype.call = function (method, params, callback) {
   }, (err, res) => {
     if (err) return callback(err)
 
+    let rpcResponse
+    try {
+      rpcResponse = JSON.parse(res.body)
+    } catch (e) {
+      return callback(e)
+    }
+
     // unpack
-    let { error, result } = res.body
+    let { error, result } = rpcResponse
     if (error) return callback(new Error(error.message || error.code))
     if (!result) return callback(new Error('Missing result'))
 
