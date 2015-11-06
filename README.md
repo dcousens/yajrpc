@@ -5,7 +5,7 @@
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
-Yet Another JSON RPC (Client)
+Yet another JSON RPC (Client)
 
 
 ## Example
