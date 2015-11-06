@@ -38,7 +38,7 @@ The `batch` API can be a little strange at first, but, when used with tools like
 let rpc = new YajRPC({ ... })
 // ...
 
-let rpcCargo = async.cargo(rpc.batch.bind(this), 32)
+let rpcCargo = async.cargo(rpc.batch.bind(rpc), 32)
 
 rpcCargo.push({
 	method: 'func1',
