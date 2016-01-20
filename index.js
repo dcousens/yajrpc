@@ -65,7 +65,7 @@ RPCClient.prototype.batch = function (batch, done) {
       // unpack
       let { error, result } = rpcResult
       if (error) return callback(new Error(error.message || error.code))
-      if (!result) return callback(new Error('Missing result'))
+      if (result === undefined) return callback(new TypeError('Missing RPC result'))
 
       callback(null, result)
     })
@@ -102,7 +102,7 @@ RPCClient.prototype.call = function (method, params, callback) {
     // unpack
     let { error, result } = rpcResponse
     if (error) return callback(new Error(error.message || error.code))
-    if (!result) return callback(new Error('Missing result'))
+    if (result === undefined) return callback(new TypeError('Missing RPC result'))
 
     callback(null, result)
   })
