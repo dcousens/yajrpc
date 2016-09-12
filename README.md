@@ -32,31 +32,26 @@ rpc.batch([{
 }, ...], function (err) { ... })
 ```
 
-The `batch` API can be a little strange at first, but, when used with tools like `async`, it can be extremely powerful:
+The `batch` API can be a little strange at first, but, when used with tools like `qup`, it can be extremely powerful:
 
 ``` javascript
-let rpc = new YajRPC({ ... })
-// ...
+let qup = require('qup')
+let Yajrpc = require('yajrpc')
 
-let rpcCargo = async.cargo(rpc.batch.bind(rpc), 32)
-
-rpcCargo.push({
-	method: 'func1',
-	params: [1, 2, 3],
-	callback: (err, result) => { ... }
+let client = new Yajrpc({
+  url: process.env.RPC,
+  user: process.env.RPCUSER,
+  pass: process.env.RPCPASSWORD
 })
 
-// or
-let results = {}
-async.map(array, (item, callback) => {
-	rpcCargo.push({
-		method: 'func1',
-		params: items,
-		callback
-	})
-}, (err, results) => {
-	// ...
-})
+// group RPC calls into batches of RPCBATCHSIZE, with RPCCONCURRENT batches concurrently
+let q = qup((batch, callback) => {
+  client.batch(batch, callback)
+}, process.env.RPCCONCURRENT, process.env.RPCBATCHSIZE)
+
+module.exports = function rpc (method, params, callback) {
+  q.push({ method, params, callback })
+}
 ```
 
 ## LICENSE [MIT](LICENSE)
