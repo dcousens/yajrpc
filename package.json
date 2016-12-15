@@ -1,6 +1,6 @@
 {
   "name": "yajrpc",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "Yet another JSON RPC",
   "author": "Daniel Cousens",
   "license": "MIT",
