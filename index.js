@@ -1,4 +1,5 @@
 let request = require('request')
+let typeforce = require('typeforce')
 
 // global used to prevent duplicates
 let rpcCount = 0
@@ -13,14 +14,18 @@ function RPCClient (opts) {
   this.url = opts.url || 'http://localhost:8332'
 }
 
+let RPC_MESSAGE_TYPE = typeforce.compile({
+  method: typeforce.String,
+  params: typeforce.Array,
+  callback: typeforce.maybe(typeforce.Function)
+})
+
 RPCClient.prototype.batch = function (batch, done) {
+  typeforce(typeforce.arrayOf(RPC_MESSAGE_TYPE), batch)
+
   let startCount = rpcCount
-  let rpcBody = batch.map(({ method, params, callback }, i) => {
-    return {
-      id: startCount + i,
-      method, params,
-      callback
-    }
+  let rpcBody = batch.map((x, i) => {
+    return Object.assign({ id: startCount + i }, x)
   })
 
   if (rpcBody.length === 0) return done()
@@ -75,11 +80,9 @@ RPCClient.prototype.batch = function (batch, done) {
 }
 
 RPCClient.prototype.call = function (method, params, callback) {
-  let rpcBody = {
-    id: rpcCount,
-    method: method,
-    params: params
-  }
+  typeforce(RPC_MESSAGE_TYPE, { method, params, callback })
+
+  let rpcBody = { id: rpcCount, method, params }
 
   // overflows at UINT32
   rpcCount = (rpcCount + 1) | 0

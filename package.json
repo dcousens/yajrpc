@@ -20,34 +20,8 @@
     "json"
   ],
   "main": "index.js",
-  "scripts": {
-    "coverage": "mocha --require blanket -R travis-cov",
-    "coverage-local": "mocha --require blanket -R html-cov",
-    "standard": "standard",
-    "test": "npm run standard && npm run unit",
-    "unit": "mocha"
-  },
-  "config": {
-    "blanket": {
-      "pattern": [
-        ""
-      ],
-      "data-cover-never": [
-        "node_modules",
-        "test"
-      ]
-    },
-    "travis-cov": {
-      "threshold": 100
-    }
-  },
   "dependencies": {
-    "request": "^2.65.0"
-  },
-  "devDependencies": {
-    "blanket": "*",
-    "mocha": "*",
-    "standard": "*",
-    "travis-cov": "*"
+    "request": "^2.65.0",
+    "typeforce": "^1.9.4"
   }
 }
