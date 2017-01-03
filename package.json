@@ -21,7 +21,7 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "request": "^2.65.0",
+    "dhttp": "^2.1.0",
     "typeforce": "^1.9.4"
   }
 }

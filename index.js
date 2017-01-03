@@ -1,4 +1,4 @@
-let request = require('request')
+let dhttp = require('dhttp')
 let typeforce = require('typeforce')
 
 // global used to prevent duplicates
@@ -8,7 +8,9 @@ function RPCClient (opts) {
   let { pass, user } = opts
 
   if (pass && user) {
-    this.auth = { pass, user }
+    this.auth = {
+      'Authorization': Buffer.from(`${user}:${pass}`, 'utf8').toString('base64')
+    }
   }
 
   this.url = opts.url || 'http://localhost:8332'
@@ -33,11 +35,11 @@ RPCClient.prototype.batch = function (batch, done) {
   // overflows at UINT32
   rpcCount = (rpcCount + rpcBody.length) | 0
 
-  request({
+  dhttp({
     url: this.url,
     method: 'POST',
     body: JSON.stringify(rpcBody),
-    auth: this.auth
+    headers: this.auth
   }, (err, res) => {
     let responseMap = {}
 
@@ -87,11 +89,11 @@ RPCClient.prototype.call = function (method, params, callback) {
   // overflows at UINT32
   rpcCount = (rpcCount + 1) | 0
 
-  request({
+  dhttp({
     url: this.url,
     method: 'POST',
     body: JSON.stringify(rpcBody),
-    auth: this.auth
+    headers: this.auth
   }, (err, res) => {
     if (err) return callback(err)
 
