@@ -5,9 +5,7 @@
   "author": "Daniel Cousens",
   "license": "MIT",
   "scripts": {
-    "standard": "standard",
-    "test": "npm run standard && npm run unit",
-    "unit": "tape test/*.js"
+    "standard": "standard"
   },
   "repository": {
     "type": "git",
@@ -30,7 +28,6 @@
     "typeforce": "^1.9.4"
   },
   "devDependencies": {
-    "standard": "*",
-    "tape": "*"
-  },
+    "standard": "*"
+  }
 }
