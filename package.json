@@ -4,6 +4,11 @@
   "description": "Yet another JSON RPC",
   "author": "Daniel Cousens",
   "license": "MIT",
+  "scripts": {
+    "standard": "standard",
+    "test": "npm run standard && npm run unit",
+    "unit": "tape test/*.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/dcousens/yajrpc.git"
@@ -23,5 +28,9 @@
   "dependencies": {
     "dhttp": "^2.1.0",
     "typeforce": "^1.9.4"
-  }
+  },
+  "devDependencies": {
+    "standard": "*",
+    "tape": "*"
+  },
 }
