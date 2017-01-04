@@ -8,9 +8,8 @@ function RPCClient (opts) {
   let { pass, user } = opts
 
   if (pass && user) {
-    this.auth = {
-      'Authorization': Buffer.from(`${user}:${pass}`, 'utf8').toString('base64')
-    }
+    let auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64')
+    this.auth = { 'Authorization': `Basic ${auth}` }
   }
 
   this.url = opts.url || 'http://localhost:8332'
@@ -26,41 +25,32 @@ RPCClient.prototype.batch = function (batch, done) {
   typeforce(typeforce.arrayOf(RPC_MESSAGE_TYPE), batch)
 
   let startCount = rpcCount
-  let rpcBody = batch.map((x, i) => {
+  let body = batch.map((x, i) => {
     return Object.assign({ id: startCount + i }, x)
   })
 
-  if (rpcBody.length === 0) return done()
+  if (body.length === 0) return done()
 
   // overflows at UINT32
-  rpcCount = (rpcCount + rpcBody.length) | 0
+  rpcCount = (rpcCount + body.length) | 0
 
   dhttp({
     url: this.url,
     method: 'POST',
-    body: JSON.stringify(rpcBody),
+    body,
     headers: this.auth
   }, (err, res) => {
     let responseMap = {}
 
-    if (!err) {
-      let rpcResponses
-
-      try {
-        rpcResponses = JSON.parse(res.body)
-      } catch (e) {
-        err = e
+    if (!err && (res.statusCode === 401)) err = new Error('Unauthorized')
+    if (!err && res.body) {
+      if (!Array.isArray(res.body)) {
+        res.body = [res.body]
       }
 
-      if (rpcResponses) {
-        if (!Array.isArray(rpcResponses)) {
-          rpcResponses = [rpcResponses]
-        }
-
-        rpcResponses.forEach(({ error, id, result }) => {
-          responseMap[id] = { error, result }
-        })
-      }
+      res.body.forEach(({ error, id, result }) => {
+        responseMap[id] = { error, result }
+      })
     }
 
     batch.forEach(({ callback }, i) => {
@@ -84,7 +74,7 @@ RPCClient.prototype.batch = function (batch, done) {
 RPCClient.prototype.call = function (method, params, callback) {
   typeforce(RPC_MESSAGE_TYPE, { method, params, callback })
 
-  let rpcBody = { id: rpcCount, method, params }
+  let body = { id: rpcCount, method, params }
 
   // overflows at UINT32
   rpcCount = (rpcCount + 1) | 0
@@ -92,20 +82,14 @@ RPCClient.prototype.call = function (method, params, callback) {
   dhttp({
     url: this.url,
     method: 'POST',
-    body: JSON.stringify(rpcBody),
+    body,
     headers: this.auth
   }, (err, res) => {
     if (err) return callback(err)
-
-    let rpcResponse
-    try {
-      rpcResponse = JSON.parse(res.body)
-    } catch (e) {
-      return callback(e)
-    }
+    if (res.statusCode === 401) return callback(new Error('Unauthorized'))
 
     // unpack
-    let { error, result } = rpcResponse
+    let { error, result } = res.body
     if (error) return callback(new Error(error.message || error.code))
     if (result === undefined) return callback(new TypeError('Missing RPC result'))
 
