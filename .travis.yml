@@ -3,7 +3,6 @@ language: node_js
 node_js:
   - "6"
 env:
-  - TEST_SUITE=coverage
   - TEST_SUITE=standard
   - TEST_SUITE=unit
 script: "npm run-script $TEST_SUITE"
