@@ -1,9 +1,9 @@
 {
   "name": "yajrpc",
-  "version": "1.2.4",
+  "version": "1.3.0",
   "description": "Yet another JSON RPC",
   "author": "Daniel Cousens",
-  "license": "MIT",
+  "license": "ISC",
   "scripts": {
     "standard": "standard"
   },
@@ -25,6 +25,7 @@
   "main": "index.js",
   "dependencies": {
     "dhttp": "^2.1.0",
+    "qup": "^1.2.1",
     "typeforce": "^1.9.4"
   },
   "devDependencies": {
