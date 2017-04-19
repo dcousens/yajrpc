@@ -1,7 +1,7 @@
 # YAJRPC
 
-[![TRAVIS](https://secure.travis-ci.org/dcousens/yajrpc.png)](http://travis-ci.org/dcousens/YAJRPC)
-[![NPM](http://img.shields.io/npm/v/yajrpc.svg)](https://www.npmjs.org/package/YAJRPC)
+[![TRAVIS](https://secure.travis-ci.org/dcousens/yajrpc.png)](http://travis-ci.org/dcousens/yajrpc)
+[![NPM](http://img.shields.io/npm/v/yajrpc.svg)](https://www.npmjs.org/package/yajrpc)
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
