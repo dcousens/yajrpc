@@ -5,11 +5,16 @@ let typeforce = require('typeforce')
 let rpcCount = 0
 
 function RPCClient (opts) {
-  let { pass, user } = opts
+  let { auth, pass, user } = opts
 
-  if (pass && user) {
-    let auth = Buffer.from(`${user}:${pass}`, 'utf8').toString('base64')
-    this.auth = { 'Authorization': `Basic ${auth}` }
+  if (auth) {
+    this.auth = {
+      'Authorization': 'Basic ' + Buffer.from(`${auth}`, 'utf8').toString('base64')
+    }
+  } else if (pass !== undefined || user !== undefined) {
+    this.auth = {
+      'Authorization': 'Basic ' + Buffer.from(`${user}:${pass}`, 'utf8').toString('base64')
+    }
   }
 
   this.url = opts.url || 'http://localhost:8332'
