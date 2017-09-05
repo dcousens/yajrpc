@@ -25,7 +25,7 @@
   "main": "index.js",
   "dependencies": {
     "dhttp": "^2.1.0",
-    "qup": "^1.2.1",
+    "qup": "^2.0.1",
     "typeforce": "^1.9.4"
   },
   "devDependencies": {
