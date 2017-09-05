@@ -1,5 +1,5 @@
 let Yajrpc = require('./')
-let qup = require('qup')
+let qup = require('qup/batch')
 
 // groups RPC calls into batches of `.batch` size, with a maximum of `.concurrent` batches simultaneously
 module.exports = function rpcQup (options) {
