@@ -11,6 +11,7 @@ Yet another JSON RPC (Client)
 ## Example
 
 ``` javascript
+let Yajrpc = require('yajrpc')
 let rpc = new YajRPC({
   url: 'http://localhost:8332',
   user: process.env.RPCUSER,
