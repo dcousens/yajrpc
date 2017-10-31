@@ -5,7 +5,8 @@ let typeforce = require('typeforce')
 let rpcCount = 0
 
 function RPCClient (opts) {
-  let { auth, pass, user } = opts
+  let { auth, pass, user, url } = opts
+  if (!url) throw new TypeError('Expected RPC opts.url, got ' + url)
 
   if (auth) {
     this.auth = {
@@ -17,7 +18,7 @@ function RPCClient (opts) {
     }
   }
 
-  this.url = opts.url || 'http://localhost:8332'
+  this.url = url
 }
 
 let RPC_MESSAGE_TYPE = typeforce.compile({
