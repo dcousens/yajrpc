@@ -54,7 +54,16 @@ RPCClient.prototype.batch = function (batch, done) {
         res.body = [res.body]
       }
 
-      res.body.forEach(({ error, id, result }) => {
+      res.body.forEach((ibody) => {
+        let error, id, result
+        if (typeof ibody === 'string') {
+          error = ibody
+        } else {
+          error = ibody.error
+          id = ibody.id
+          result = ibody.result
+        }
+
         responseMap[id] = { error, result }
       })
     }
