@@ -51,21 +51,12 @@ RPCClient.prototype.batch = function (batch, done) {
     if (!err && (res.statusCode === 401)) err = new Error('Unauthorized')
     if (!err && res.body) {
       if (!Array.isArray(res.body)) {
-        res.body = [res.body]
+        err = new Error(res.body)
+      } else {
+        res.body.forEach(({ error, id, result }) => {
+          responseMap[id] = { error, result }
+        })
       }
-
-      res.body.forEach((ibody) => {
-        let error, id, result
-        if (typeof ibody === 'string') {
-          error = ibody
-        } else {
-          error = ibody.error
-          id = ibody.id
-          result = ibody.result
-        }
-
-        responseMap[id] = { error, result }
-      })
     }
 
     batch.forEach(({ callback }, i) => {
