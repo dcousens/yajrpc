@@ -60,4 +60,4 @@ rpc('func1', [1, 2, 3], ...)
 See `yajrpc/qup` for a pre-made equivalent of the above.
 
 
-## LICENSE [ISC](LICENSE)
+## LICENSE [MIT](LICENSE)
