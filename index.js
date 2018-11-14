@@ -5,9 +5,9 @@ let typeforce = require('typeforce')
 let rpcCount = 0
 
 function RPCClient (opts) {
+  typeforce({ url: typeforce.String }, opts)
+  
   let { auth, pass, user, url } = opts
-  if (!url) throw new TypeError('Expected RPC opts.url, got ' + url)
-
   if (auth) {
     this.auth = {
       'Authorization': 'Basic ' + Buffer.from(`${auth}`, 'utf8').toString('base64')
